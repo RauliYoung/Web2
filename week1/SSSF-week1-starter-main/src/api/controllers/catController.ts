@@ -45,12 +45,22 @@ const catGet = async (req: Request, res: Response<Cat>, next: NextFunction) => {
   }
 };
 
-// TODO: create catPost function to add new cat
+// TODO: create catPost function to add new cat TRISTAN HALOO
 const catPost = async (
   req: Request<{}, {}, Omit<Cat, 'owner'> & {owner: number}>,
   res: Response<MessageResponse, {coords: [number, number]}>,
   next: NextFunction
 ) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const messages: string = errors
+      .array()
+      .map((error) => `${error.msg}: ${error.param}`)
+      .join(', ');
+    console.log('cat_post validation', messages);
+    next(new CustomError(messages, 400));
+    return;
+  }
   // catPost should use addCat function from catModel
   // catPost should use validationResult to validate req.body
   // catPost should use req.file to get filename
