@@ -93,6 +93,7 @@ const userDeleteCurrent = async (
   res: Response<MessageResponse>,
   next: NextFunction
 ) => {
+  const errors = validationResult(req); // Added by Tristan, not sure if works..
   if (!errors.isEmpty()) {
     const messages: string = errors
       .array()
