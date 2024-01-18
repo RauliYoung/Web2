@@ -47,6 +47,9 @@ const userGet = async (
 // - email should be a valid email
 // - password should be at least 5 characters long
 // userPost should use bcrypt to hash password
+const userPost = async (req: Request, res: Response, next: NextFunction) => {
+  //TODO
+};
 
 const userPut = async (
   req: Request<{id: number}, {}, User>,
@@ -82,12 +85,20 @@ const userPut = async (
 // TODO: create userPutCurrent function to update current user
 // userPutCurrent should use updateUser function from userModel
 // userPutCurrent should use validationResult to validate req.body
-
+const userPutCurrent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  //TODO
+};
 // TODO: create userDelete function for admin to delete user by id
 // userDelete should use deleteUser function from userModel
 // userDelete should use validationResult to validate req.params.id
 // userDelete should use req.user to get role
-
+const userDelete = async (req: Request, res: Response, next: NextFunction) => {
+  //TODO
+};
 const userDeleteCurrent = async (
   req: Request,
   res: Response<MessageResponse>,

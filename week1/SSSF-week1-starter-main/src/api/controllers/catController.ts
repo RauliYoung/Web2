@@ -77,7 +77,7 @@ const catPut = async (
   try {
     const id = Number(req.params.id);
     const cat = req.body;
-    const result = await updateCat(cat, id, req.user.user_id, req.user.role);
+    const result = await updateCat(cat, id, req.user?.user_id, req.user?.role);
     res.json(result);
   } catch (error) {
     next(error);
@@ -87,5 +87,8 @@ const catPut = async (
 // TODO: create catDelete function to delete cat
 // catDelete should use deleteCat function from catModel
 // catDelete should use validationResult to validate req.params.id
+const catDelete = async (req: Request, res: Response, next: NextFunction) => {
+  //TODO
+};
 
 export {catListGet, catGet, catPost, catPut, catDelete};
