@@ -43,7 +43,7 @@ const categoryPost = async (
 ) => {
   const categoryID = Number(req.params.id);
   try {
-    const category = await addCategory(req.body);
+    await addCategory(req.body);
     res.send({
       message: 'Category added',
       id: categoryID,
