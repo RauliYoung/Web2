@@ -37,15 +37,16 @@ const categoryGet = async (
 };
 
 const categoryPost = async (
-  req: Request<{}, {}, Pick<Category, 'category_name'>>,
+  req: Request<{id: number}, {}, Pick<Category, 'category_name'>>,
   res: Response<PostMessage>,
   next: NextFunction
 ) => {
+  const categoryID = Number(req.params.id);
   try {
-    const categoryID = await addCategory(req.body);
+    const category = await addCategory(req.body);
     res.send({
       message: 'Category added',
-      id: categoryID, //TODO: fix this
+      id: categoryID,
     });
   } catch (error) {
     next(error);
