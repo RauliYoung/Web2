@@ -6,4 +6,8 @@ type ErrorResponse = MessageResponse & {
   stack?: string;
 };
 
-export {MessageResponse, ErrorResponse};
+type PostMessage = MessageResponse & {
+  id: number;
+};
+
+export {MessageResponse, ErrorResponse, PostMessage};
