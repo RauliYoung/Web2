@@ -54,6 +54,7 @@ const postUser = (
   url: string | Function,
   user: Omit<User, 'user_id' | 'role'>
 ): Promise<MessageResponse> => {
+  console.log('postUser', user);
   return new Promise((resolve, reject) => {
     request(url)
       .post('/api/v1/users/')

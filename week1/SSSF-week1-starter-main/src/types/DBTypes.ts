@@ -16,7 +16,10 @@ type Cat = {
   birthdate: Date;
   lat: number;
   lng: number;
-  owner: User;
+  owner: {
+    user_id: number;
+    user_name: string;
+  };
 };
 
 export {Cat};

@@ -61,6 +61,7 @@ describe('GET /api/v1', () => {
   it('should return array of users', async () => {
     const users: User[] = await getUser(app);
     userId = users[0].user_id!;
+    console.log('userId', userId);
   });
 
   // test get single user

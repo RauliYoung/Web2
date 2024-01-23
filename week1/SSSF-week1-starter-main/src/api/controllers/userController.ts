@@ -48,7 +48,35 @@ const userGet = async (
 // - password should be at least 5 characters long
 // userPost should use bcrypt to hash password
 const userPost = async (req: Request, res: Response, next: NextFunction) => {
-  //TODO
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const messages: string = errors
+      .array()
+      .map((error) => `${error.msg}: ${error.param}`)
+      .join(', ');
+    console.log('user_post validation', messages);
+    next(new CustomError(messages, 400));
+  } else {
+    try {
+      const user: User = req.body;
+
+      // Check password length
+      if (user.password.length < 5) {
+        throw new CustomError(
+          'Password should be at least 5 characters long',
+          400
+        );
+      }
+
+      const password = bcrypt.hashSync(user.password, salt);
+      req.body.password = password;
+      const result = await addUser(user);
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 };
 
 const userPut = async (
@@ -66,16 +94,12 @@ const userPut = async (
     next(new CustomError(messages, 400));
     return;
   }
-
   try {
     if (req.user && req.user.role !== 'admin') {
       throw new CustomError('Admin only', 403);
     }
-
     const user = req.body;
-
     const result = await updateUser(user, req.params.id);
-
     res.json(result);
   } catch (error) {
     next(error);
@@ -90,21 +114,7 @@ const userPutCurrent = async (
   res: Response,
   next: NextFunction
 ) => {
-  //TODO
-};
-// TODO: create userDelete function for admin to delete user by id
-// userDelete should use deleteUser function from userModel
-// userDelete should use validationResult to validate req.params.id
-// userDelete should use req.user to get role
-const userDelete = async (req: Request, res: Response, next: NextFunction) => {
-  //TODO
-};
-const userDeleteCurrent = async (
-  req: Request,
-  res: Response<MessageResponse>,
-  next: NextFunction
-) => {
-  const errors = validationResult(req); // Added by Tristan, not sure if works..
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const messages: string = errors
       .array()
@@ -114,13 +124,67 @@ const userDeleteCurrent = async (
     next(new CustomError(messages, 400));
     return;
   }
-
   try {
-    if (!req.user?.user_id) {
+    if (!req.user) {
       throw new CustomError('No user', 400);
     }
-    const result = await deleteUser(req.user.user_id);
-
+    const user = req.body;
+    console.error(user);
+    const result = await updateUser(user, req.user.user_id as number);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+// TODO: create userDelete function for admin to delete user by id
+// userDelete should use deleteUser function from userModel
+// userDelete should use validationResult to validate req.params.id
+// userDelete should use req.user to get role
+const userDelete = async (req: Request, res: Response, next: NextFunction) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const messages: string = errors
+      .array()
+      .map((error) => `${error.msg}: ${error.param}`)
+      .join(', ');
+    console.log('cat_post validation', messages);
+    next(new CustomError(messages, 400));
+    return;
+  }
+  try {
+    if (req.user && req.user.role !== 'admin') {
+      throw new CustomError('Admin only', 403);
+    }
+    const result = await deleteUser(Number(req.params.id));
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+const userDeleteCurrent = async (
+  req: Request,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const messages: string = errors
+      .array()
+      .map((error) => `${error.msg}: ${error.param}`)
+      .join(', ');
+    next(new CustomError(messages, 400));
+    return;
+  }
+  try {
+    if (!req.user) {
+      console.log(
+        'No user',
+        req.user,
+        '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+      );
+      throw new CustomError('No user', 400);
+    }
+    const result = await deleteUser(req.user.user_id as number);
     res.json(result);
   } catch (error) {
     next(error);
