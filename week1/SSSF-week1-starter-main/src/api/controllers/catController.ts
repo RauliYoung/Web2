@@ -80,7 +80,6 @@ const catPost = async (
   try {
     const catData: Omit<Cat, 'owner'> & {owner: number} = req.body;
     const ownerId = req.user ? req.user.user_id : 0;
-    console.log(res.locals.coords, 'coooorSIINDAISDNNSDS');
     const result = await addCat(
       ownerId as number,
       catData,
