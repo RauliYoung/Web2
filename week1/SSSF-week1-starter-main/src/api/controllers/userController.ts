@@ -129,7 +129,6 @@ const userPutCurrent = async (
       throw new CustomError('No user', 400);
     }
     const user = req.body;
-    console.error(user);
     const result = await updateUser(user, req.user.user_id as number);
     res.json(result);
   } catch (error) {
@@ -177,11 +176,6 @@ const userDeleteCurrent = async (
   }
   try {
     if (!req.user) {
-      console.log(
-        'No user',
-        req.user,
-        '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-      );
       throw new CustomError('No user', 400);
     }
     const result = await deleteUser(req.user.user_id as number);
