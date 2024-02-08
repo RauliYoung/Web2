@@ -83,7 +83,7 @@ const catPost = async (
     const result = await addCat(
       ownerId as number,
       catData,
-      req.file.path,
+      req.file.filename,
       res.locals.coords
     );
     res.json(result);
