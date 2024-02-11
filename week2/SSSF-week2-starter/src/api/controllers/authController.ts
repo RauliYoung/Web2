@@ -42,7 +42,7 @@ const login = async (
       _id: user._id,
       user_name: user.user_name,
       email: user.email,
-      role: user.role as 'user' | 'admin',
+      role: user.role,
     };
 
     const token = jwt.sign(outUserToken, process.env.JWT_SECRET);

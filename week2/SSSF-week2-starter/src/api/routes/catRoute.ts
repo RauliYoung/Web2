@@ -10,7 +10,6 @@ import {
   catPutAdmin,
   catDeleteAdmin,
 } from '../controllers/catController';
-
 import multer, {FileFilterCallback} from 'multer';
 import {body, param, query} from 'express-validator';
 import {authenticate, getCoordinates, makeThumbnail} from '../../middlewares';

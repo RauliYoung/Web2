@@ -5,7 +5,7 @@ import {ExifImage} from 'exif';
 import {ErrorResponse} from './types/MessageTypes';
 import CustomError from './classes/CustomError';
 import jwt from 'jsonwebtoken';
-import {UserOutput} from './types/DBTypes';
+import {LoginUser, UserOutput} from './types/DBTypes';
 import userModel from './api/models/userModel';
 
 // convert GPS coordinates to decimal format
@@ -27,7 +27,7 @@ const errorHandler = (
   res: Response<ErrorResponse>,
   next: NextFunction
 ) => {
-  console.error('errorHandler', err.message);
+  // console.error('errorHandler', err.message);
   res.status(err.status || 500);
   res.json({
     message: err.message,
@@ -113,15 +113,14 @@ const authenticate = async (
     const tokenContent = jwt.verify(
       token,
       process.env.JWT_SECRET as string
-    ) as UserOutput;
+    ) as LoginUser;
 
     // check if user exists in database (optional)
-    // const user = await userModel.findById(tokenContent._id);
-
-    // if (!user) {
-    //   next(new CustomError('Token not valid', 403));
-    //   return;
-    // }
+    const user = await userModel.findById(tokenContent._id);
+    if (!user) {
+      next(new CustomError('Token not valid', 403));
+      return;
+    }
 
     // add user to req locals to be used in other middlewares / controllers
     res.locals.user = tokenContent;

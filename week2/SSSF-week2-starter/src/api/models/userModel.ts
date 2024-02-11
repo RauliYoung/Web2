@@ -1,12 +1,14 @@
 // TODO: mongoose schema for user
-// with this snippet from src/api/models/userModel.ts:
 import mongoose from 'mongoose';
+import {User} from '../../types/DBTypes';
 
 const userSchema = new mongoose.Schema({
-  user_name: {type: String, required: true},
+  user_name: {type: String, required: true, unique: true},
   email: {type: String, required: true, unique: true},
-  role: {type: String, required: true, default: 'user'},
+  role: {type: String, enum: ['user', 'admin'], default: 'user'},
   password: {type: String, required: true},
 });
 
-export default mongoose.model('User', userSchema);
+const UserModel = mongoose.model<User & mongoose.Document>('User', userSchema);
+
+export default UserModel;
